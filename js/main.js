@@ -110,13 +110,13 @@ function uploadData(){
     console.log(result);
     if (status == google.maps.DirectionsStatus.OK) {
       for (var i = 0, len = result.routes.length; i<len; i++){
-        calculateRouteDanger(result.routes[i]);
+        var danger = calculateRouteDanger(result.routes[i]);
         new google.maps.DirectionsRenderer({
           map: map,
           directions: result,
           routeIndex: i,
           polylineOptions: {
-            strokeColor: getColorFromMag(i)
+            strokeColor: getColorFromMag(danger)
           }
         });
       }
@@ -145,9 +145,10 @@ function getColorFromMag(mag){
 
 function calculateRouteDanger(route) {
   var route = route;
-  var route_danger = 0;
+  var route_danger_total = 0;
   //console.log(route);
  // console.log("Got route");
+ var number_steps = route.legs[0].steps.length;
   for (var i = 0; i<route.legs[0].steps.length; i++){
     //console.log("Got Step " + i + "\n");
     var steps = route.legs[0].steps[i];
@@ -156,9 +157,9 @@ function calculateRouteDanger(route) {
       var step_start_lng = steps.path[0].lng();
       var step_end_lat = steps.path[steps.path.length - 1].lat();
       var step_end_lng = steps.path[steps.path.length - 1].lng();
-      route_danger+=calculateStepDanger(step_start_lat, step_start_lng, step_end_lat, step_end_lng);
+      route_danger_total+=calculateStepDanger(step_start_lat, step_start_lng, step_end_lat, step_end_lng);
   }
-  console.log("This Route's Danger Level is : " + route_danger);
+  console.log("This Route's Danger Level is : " + route_danger_total/number_steps);
 }
 
 function calculateStepDanger(slat, slng, elat, elng){
