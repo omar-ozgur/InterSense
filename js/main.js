@@ -73,9 +73,9 @@ function initMap() {
       lat: lat,
       lng: lng,
       mag: mag
-      }
-      sensor_Info.push(sensor_data);
-    };
+    }
+    sensor_Info.push(sensor_data);
+  };
   console.log(sensor_Info);
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 34.069858, lng: -118.445205 },
@@ -125,6 +125,7 @@ function initMap() {
 
 
 function uploadData(){
+  directionsDisplay.set('directions', null);
   //console.log("upload called");
   var from_address = document.getElementById("from-input").value;
   var destination_address = document.getElementById("destination-input").value;
@@ -150,20 +151,30 @@ function uploadData(){
 
   directionsService.route(DirectionsRequest, function(result, status) {
     console.log(result);
+    var routes_Danger_Array = [];
+    var sorted_Routes = [];
     if (status == google.maps.DirectionsStatus.OK) {
       for (var i = 0, len = result.routes.length; i<len; i++){
         var danger = calculateRouteDanger(result.routes[i]);
+        routes_Danger_Array.push({index: i, danger: danger});
+      }
+      sorted_Routes = routes_Danger_Array.sort(route_DangerSort)
+      console.log(sorted_Routes); 
+
+      for (var i = 0, len = result.routes.length; i<len; i++){
         new google.maps.DirectionsRenderer({
           map: map,
           directions: result,
-          routeIndex: i,
+          routeIndex: sorted_Routes[i].index,
           polylineOptions: {
-            strokeColor: getColorFromMag(danger)
+            strokeColor: getColorFromMag(i),
+            strokeWeight: result.routes.length+1-i,
+            strokeOpacity: 1/(i+1)
           }
         });
       }
-      
     }
+
   });
   return false;
 }
@@ -202,6 +213,7 @@ function calculateRouteDanger(route) {
     route_danger_total+=calculateStepDanger(step_start_lat, step_start_lng, step_end_lat, step_end_lng);
   }
   console.log("This Route's Danger Level is : " + route_danger_total/number_steps);
+  return route_danger_total/number_steps;
 }
 
 function calculateStepDanger(slat, slng, elat, elng){
@@ -209,6 +221,14 @@ function calculateStepDanger(slat, slng, elat, elng){
   return getClosestSensorScore(slat, slng) + getClosestSensorScore(elat, elng);
 }
 
+
+function route_DangerSort(a,b){
+  if (a.danger==b.danger) {
+    return 0;
+  }
+  else 
+    return (a.danger < b.danger) ? -1 : 1;
+}
 function getClosestSensorScore(lat, lng) {
   var distance_array=[]
   for (var i = 0; i<sensor_Info.length; i++){
