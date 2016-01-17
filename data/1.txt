@@ -1,4 +1,0 @@
-eqfeed_callback({"type":"FeatureCollection",
-"features":[
-{"type":"Feature","properties":{"mag":5},"geometry":{"type":"Point","coordinates":[-118.4444,34.0690,0]}}
-]})

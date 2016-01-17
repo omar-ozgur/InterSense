@@ -24,19 +24,39 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>InterSense: Geographical Air Quality Data</title>
+        <meta name="description" content="Geographical Air Quality Data Visualization">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap&libraries=places,visualization"></script>
     </head>
     <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
+        <h1 id="header">InterSense</h1>
+        <div id="map">
         </div>
+        <form id="map-form" class="form-horizontal" onsubmit="uploadData()" action="#">
+            <div class="form-group">
+                <div class="col-xs-6">
+                    <input id="from-input" class="controls form-control input-lg" type="text" placeholder="Origin">
+                    <input id="destination-input" class="controls form-control input-lg" type="text" placeholder="Destination">
+                </div> 
+                <div class="col-xs-3">
+                    <img id="walk" class="img" src="img/uwalk.png" onclick="uploadData('walk')">
+                </div>
+                <div class="col-xs-3">
+                    <img id="bike" class="img" src="img/ubike.png" onclick="uploadData('cycle')">
+                </div>
+            </div>
+        </form>
+
+        <script src="js/jquery-2.2.0.js"></script>
+        <script src="js/d3.min.js" charset="utf-8"></script>
+        <script src="js/main.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">

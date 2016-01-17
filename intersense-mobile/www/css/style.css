@@ -7,15 +7,15 @@ html, body {
 }
 
 #header {
-	height: 7%;
+	padding: 1.75%;
+	height: 9%;
 	color: #77e1ee;
-	font-size: 200%;
+	font-size: 300%;
 	background-color: #2b3e50;
-	text-align: center;
 }
 
 #map {
-	height: 67%;
+	height: 75%;
 	text-align: center;
 	background-color: #2b3e50;
 }
@@ -38,7 +38,8 @@ html, body {
 }
 
 .img {
-	padding: 5%;
+	height: 50px;
+	margin: 30%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

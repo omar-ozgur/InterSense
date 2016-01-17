@@ -6,21 +6,14 @@ var sensor_Info = [];
 
 var HeatMapData = [];
 
-var routes_Danger_Array = [];
-  var sorted_Routes = [];
-
-  var darray = [];
-
 function initMap() {
-  directionsDisplay = new google.maps.DirectionsRenderer();
-  directionsService = new google.maps.DirectionsService();
-
   var channelsAPI = "https://thingspeak.com/channels/79178/feeds?api_key=EFIQKU540P5BD8NE?results=5";
   $.getJSON(channelsAPI, {
     format: "json"
   })
   .done(function(data) {
     var dataString = data.channel.latitude+" "+data.channel.longitude+" "+(data.feeds[0].field1+2)+" \\";
+    console.log(dataString);
     temp_data+=dataString;
     createMap();
   })
@@ -29,9 +22,13 @@ function initMap() {
 function createMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 34.069858, lng: -118.445205 },
-    zoom: 15,
+    zoom: 16,
     styles: mapStyle
   });
+
+  
+
+  console.log(temp_data);
 
   var split_values = temp_data.split(" ");
 
@@ -56,18 +53,6 @@ function createMap() {
     });
 
     marker.setOpacity(0);
-
-    var color = getColorFromMag(marker.mag);
-
-    // Add circle overlay and bind to marker
-    var circle = new google.maps.Circle({
-      map: map,
-      radius: 80,    // 10 miles in metres
-      fillOpacity: 0.3,
-      strokeOpacity: 0.0,
-      fillColor: color
-    });
-    circle.bindTo('center', marker, 'position');
     
     var infowindow = new google.maps.InfoWindow;
 
@@ -76,6 +61,9 @@ function createMap() {
       infowindow.open(map, this);
     });
   };
+
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
 
   for (var i = 0; i<sensor_Info.length; i++){
     var location = new google.maps.LatLng(sensor_Info[i].lat, sensor_Info[i].lng);
@@ -89,7 +77,7 @@ function createMap() {
 
   var heatmap = new google.maps.visualization.HeatmapLayer({
     data: HeatMapData,
-    radius: 0
+    radius: 50
   });
   heatmap.setMap(map);
 
@@ -111,6 +99,7 @@ function uploadData(transport_method){
   var imageWalk = document.getElementById('walk');
   var imageBike = document.getElementById('bike');
 
+  directionsDisplay.set('directions', null);
   //console.log("upload called");
   var from_address = document.getElementById("from-input").value;
   var destination_address = document.getElementById("destination-input").value;
@@ -139,15 +128,9 @@ function uploadData(transport_method){
   };
 
   directionsService.route(DirectionsRequest, function(result, status) {
-
-    for (var i = 0; i < darray.length; i++){
-        darray[i].setMap(null);
-        darray[i] = null;
-      }
-      darray = [];
-      sorted_Routes = [];
-      routes_Danger_Array = [];
-
+    console.log(result);
+    var routes_Danger_Array = [];
+    var sorted_Routes = [];
     if (status == google.maps.DirectionsStatus.OK) {
       for (var i = 0, len = result.routes.length; i<len; i++){
         var danger = calculateRouteDanger(result.routes[i]);
@@ -156,25 +139,18 @@ function uploadData(transport_method){
       sorted_Routes = routes_Danger_Array.sort(route_DangerSort)
       console.log(sorted_Routes); 
 
-      directionsDisplay.setMap(null);
-
-      directionsDisplay.setDirections(result);
-
       for (var i = 0, len = result.routes.length; i<len; i++){
-        directionsDisplay = new google.maps.DirectionsRenderer({
-          directions: result,
+        new google.maps.DirectionsRenderer({
           map: map,
+          directions: result,
           routeIndex: sorted_Routes[i].index,
           polylineOptions: {
-            strokeColor: getColorFromMag(routes_Danger_Array[i].danger),
-            strokeWeight: 5,
-            strokeOpacity: 1
+            strokeColor: getColorFromMag(i),
+            strokeWeight: result.routes.length+1-i,
+            strokeOpacity: 1/(i+1)
           }
         });
-        darray.push(directionsDisplay);
       }
-
-      directionsDisplay.setMap(map);
     }
 
   });
@@ -182,17 +158,20 @@ function uploadData(transport_method){
 }
 
 function getColorFromMag(mag){
-  var low = [151, 83, 34];   // color of mag 1.0
-  var high = [5, 69, 54];  // color of mag 6.0 and above
-  var minMag = 0.0;
-  var maxMag = 1000.0;
-
-  // fraction represents where the value sits between the min and max
-  var fraction = (Math.min(mag, maxMag) - minMag) /
-    (maxMag - minMag);
-
-  var color = interpolateHsl(low, high, fraction);
-  return color;
+  switch (mag){
+    case 0:
+    return "green";
+    break;
+    case 1: 
+    return "orange";
+    break;
+    case 2:
+    return "red";
+    break;
+    default:
+    return "black";
+    break;
+  }
 }
 
 function calculateRouteDanger(route) {
@@ -238,16 +217,6 @@ function getClosestSensorScore(lat, lng) {
   var closestSensor = distance_array.indexOf(min)
   //console.log("Closest Sensor Mag: " + sensor_Info[closestSensor].mag);
   return sensor_Info[closestSensor].mag;
-}
-
-function interpolateHsl(lowHsl, highHsl, fraction) {
-  var color = [];
-  for (var i = 0; i < 3; i++) {
-    // Calculate color based on the fraction.
-    color[i] = (highHsl[i] - lowHsl[i]) * fraction + lowHsl[i];
-  }
-
-  return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
 }
 
 var mapStyle = [
