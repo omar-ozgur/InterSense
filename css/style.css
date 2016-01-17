@@ -7,3 +7,10 @@ html, body {
 #map {
 	height: 100%;
 }
+
+.directions_container {
+	position: relative;
+	height:100px;
+	width: 100%;
+	border-style: dotted;
+}

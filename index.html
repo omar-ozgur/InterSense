@@ -2,20 +2,45 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+	<meta charset="utf-8">
 
-  <title>InterSense: Geographical Air Quality Data</title>
-  <meta name="description" content="Geographical Air Quality Data Visualization">
+	<title>InterSense: Geographical Air Quality Data</title>
+	<meta name="description" content="Geographical Air Quality Data Visualization">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/directions.js"></script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap&libraries=places,visualization"></script>
 
-  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body id="map-container">
+<body >
+
+
+	<div id="map-container">
+		<form id="directions_form" onsubmit="uploadData()">
+			<ul>
+				<li>
+					<input id="from-input" class="controls" type="text" placeholder="Enter Place of Origin">
+				</li>
+				<li>
+					<input id="destination-input" class="controls" type="text" placeholder="Enter Destination">
+				</li>
+				<li>
+					<div>
+						<select id="transport_method">
+                        <option value="walk">Walking</option>
+                        <option value="cycle">Cycling</option>
+                        </select></br> <input type="submit" value="Submit">
+					</div>
+				</li>
+			</ul>
+
+		</form>
+	</div>
 	<script src="js/jquery-2.2.0.js"></script>
 	<script src="js/d3.min.js" charset="utf-8"></script>
 	<script src="js/main.js"></script>
 	<div id="map">
-	<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap"></script>
-</body>
-</html>
+			</body>
+	</html>
