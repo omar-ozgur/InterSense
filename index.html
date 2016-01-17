@@ -8,7 +8,6 @@
 	<meta name="description" content="Geographical Air Quality Data Visualization">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/directions.js"></script>
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap&libraries=places,visualization"></script>
 
@@ -18,7 +17,7 @@
 
 
 	<div id="map-container">
-		<form id="directions_form" onsubmit="uploadData()">
+		<form id="directions_form" onsubmit="uploadData()" action="#">
 			<ul>
 				<li>
 					<input id="from-input" class="controls" type="text" placeholder="Enter Place of Origin">
