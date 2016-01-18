@@ -7,20 +7,21 @@ html, body {
 }
 
 #header {
-	height: 5%;
-	font-size: 180%;
+	height: 7%;
+	font-size: 250%;
 	text-align: center;
 	color: #77e1ee;
 }
 
-#subheader {
-	font-size: 90%;
-	color: #ffffff;
+#map {
+	height: 70%;
+	text-align: center;
 }
 
-#map {
-	height: 65%;
-	text-align: center;
+.form-horizontal, .form-group {
+	width:100%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #origin, #destination {
@@ -34,7 +35,8 @@ html, body {
 }
 
 .img {
-	padding: 5%;
+	height: 50px;
+	margin: 30%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

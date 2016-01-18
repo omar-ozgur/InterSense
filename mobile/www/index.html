@@ -9,10 +9,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <h1 id="header">InterSense: <span id="subheader">Directions Based on Air Quality</span></h1>
-
-        <div id="map">
-        </div>
+        <h1 id="header">InterSense</h1>
 
         <form class="form-horizontal" onsubmit="uploadData()" action="#">
             <div class="form-group">
@@ -29,8 +26,12 @@
             </div>
         </form>
 
+        <div id="map">
+        </div>
+
         <script src="js/jquery-2.2.0.js"></script>
         <script src="js/main.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap&libraries=places,visualization"></script>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpyRTGIot7TRppVae39RgMQqwfcFl_0ns&signed_in=true&callback=initMap&libraries=places,visualization"></script>
     </body>
 </html>
