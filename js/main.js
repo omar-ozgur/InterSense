@@ -19,8 +19,8 @@ function initMap() {
   .done(function(data) {
     var dataString = data.channel.latitude+" "+data.channel.longitude+" "+(data.feeds[0].field1)+" \\";
     tempData+=dataString;
-    createMap();
   })
+  createMap();
 }
 
 function createMap() {
